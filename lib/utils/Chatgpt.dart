@@ -1,4 +1,4 @@
-import 'package:dart_openai/openai.dart';
+import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_storage/get_storage.dart';
@@ -18,9 +18,9 @@ class ChatGPT {
 
   static GetStorage storage = GetStorage();
 
-  static String chatGptToken =
-      dotenv.env['OPENAI_CHATGPT_TOKEN'] ?? ''; // token
-  static String defaultModel = 'gpt-3.5-turbo';
+  static String chatGptToken = dotenv.env['OPENAI_CHATGPT_TOKEN'] ?? ''; // token
+  static String chatGptBaseUrl = dotenv.env['OPENAI_CHATGPT_BASE_URL'] ?? ''; // base url
+  static String defaultModel = 'gpt-4o';
   static List defaultRoles = [
     'system',
     'user',
@@ -225,7 +225,10 @@ class ChatGPT {
 
   static String getCacheOpenAIBaseUrl() {
     String? key = storage.read('OpenAIBaseUrl');
-    return (key ?? "").isEmpty ? "" : key!;
+    if ( key != null && key != '' && key != chatGptBaseUrl) {
+      return key;
+    }
+    return '';
   }
 
   static Set chatModelTypeList =
@@ -243,10 +246,9 @@ class ChatGPT {
     String cacheKey = getCacheOpenAIKey();
     String cacheUrl = getCacheOpenAIBaseUrl();
     var apiKey = cacheKey != '' ? cacheKey : chatGptToken;
-    OpenAI.apiKey = apiKey;
-    if (apiKey != chatGptToken) {
-      OpenAI.baseUrl =
-          cacheUrl.isNotEmpty ? cacheUrl : "https://api.openai.com";
+    if ( apiKey != '') {
+      OpenAI.apiKey = apiKey;
+      OpenAI.baseUrl =  cacheUrl != '' ? cacheUrl : chatGptBaseUrl;
     }
   }
 
@@ -260,10 +262,11 @@ class ChatGPT {
   static convertListToModel(List messages) {
     List<OpenAIChatCompletionChoiceMessageModel> modelMessages = [];
     for (var element in messages) {
-      modelMessages.add(OpenAIChatCompletionChoiceMessageModel(
-        role: getRoleFromString(element["role"]),
-        content: element["content"],
-      ));
+      // modelMessages.add(OpenAIChatCompletionChoiceMessageModel(
+      //   role: getRoleFromString(element["role"]),
+      //   content: element["content"],
+      // ));
+      modelMessages.add(OpenAIChatCompletionChoiceMessageModel.fromMap(element));
     }
     return modelMessages;
   }
@@ -302,7 +305,7 @@ class ChatGPT {
       model: model,
     );
     debugPrint('---text $text---');
-    String content = chatCompletion.choices.first.message.content ?? '';
+    String content = chatCompletion.choices.first.message.content?.first.text?? '';
     bool hasRelation = content.toLowerCase().contains('true');
     debugPrint('--- $hasRelation---');
     return hasRelation;
