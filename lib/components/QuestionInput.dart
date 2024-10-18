@@ -217,7 +217,7 @@ class _QuestionInputState extends State<QuestionInput> {
       final firstCompletionChoice = response.choices.first;
       await store.replaceMessage(chat['id'], messageIndex, {
         'role': 'assistant',
-        'content': firstCompletionChoice.message.content,
+        'content': firstCompletionChoice.message.content?.first.text,
       });
       _updateGeneratingStatus(false);
     } catch (error) {
