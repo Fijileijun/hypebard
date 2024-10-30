@@ -159,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     if (store.homeHistoryList.length > 0)
                       _renderTitle(
-                        'Your Rewinds',
+                        '会话历史',
                         animateText: false,
                         rightContent: Flexible(
                           child: SizedBox(
@@ -199,7 +199,7 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'More',
+                                      '更多',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontSize: 18,
@@ -220,7 +220,7 @@ class _HomePageState extends State<HomePage> {
                       _renderChatListWidget(
                         store.homeHistoryList,
                       ),
-                    _renderTitle("Hey, I am"),
+                    _renderTitle("Hey, 我是"),
                     _renderChatModelListWidget(),
                   ],
                 ),

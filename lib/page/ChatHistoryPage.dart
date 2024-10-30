@@ -63,7 +63,7 @@ class _ChatHistoryPageState extends State<ChatHistoryPage> {
                     ),
                     SizedBox(width: 12),
                     Text(
-                      "Your Rewinds",
+                      "回话历史",
                       style: TextStyle(
                         color: Color.fromRGBO(0, 0, 0, 1),
                         fontSize: 26,

@@ -287,7 +287,7 @@ class _ChatPageState extends State<ChatPage> {
             ),
             const SizedBox(height: 12),
             const Text(
-              'Get started, Made with ❤ by Somrit',
+              'Get started, Made with ❤ by Jacobs',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 16,

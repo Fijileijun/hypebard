@@ -30,19 +30,32 @@ class ChatGPT {
   static List chatModelList = [
     {
       "type": "chat",
-      "name": "AI Chat",
-      "desc": "Natural language chat, continuous conversation mode",
+      "name": "餐厅培训助手",
+      "desc": "有什么问题关于餐厅培训问题可以直接问我",
       "isContinuous": true,
       "content": "\nInstructions:"
           "\nYou are ChatGPT. The answer to each question should be as concise as possible. If you're making a list, don't have too many entries."
           " If possible, please format it in a friendly markdown format."
           '\n',
       "tips": [
-        "Write me a wholesome quote",
-        "I need a sarcastic joke?",
-        "Help me plan a trip",
-        "I need a pickup line!"
+        "如何做披萨！"
       ],
+    },
+    // {
+    //   "type": "chat",
+    //   "name": "AI Chat",
+    //   "desc": "Natural language chat, continuous conversation mode",
+    //   "isContinuous": true,
+    //   "content": "\nInstructions:"
+    //       "\nYou are ChatGPT. The answer to each question should be as concise as possible. If you're making a list, don't have too many entries."
+    //       " If possible, please format it in a friendly markdown format."
+    //       '\n',
+    //   "tips": [
+    //     "Write me a wholesome quote",
+    //     "I need a sarcastic joke?",
+    //     "Help me plan a trip",
+    //     "I need a pickup line!"
+    //   ],
     // },
     // {
     //   "type": "translationLanguage",
@@ -202,7 +215,7 @@ class ChatGPT {
     //   "tips": [
     //     'I’m making surrealistic portrait paintings',
     //   ],
-    },
+    // },
   ];
 
   static Future<void> setOpenAIKey(String key) async {

@@ -84,7 +84,7 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
                         ),
                         SizedBox(width: 12),
                         Text(
-                          "Settings",
+                          "设置",
                           style: TextStyle(
                             color: Color.fromRGBO(0, 0, 0, 1),
                             fontSize: 26,
@@ -112,7 +112,7 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
                       Icons.vpn_key,
                       Colors.lightGreen,
                       26,
-                      'Customize OpenAI API',
+                      '定制OpenAI KEY',
                       () async {
                         String cacheKey = ChatGPT.getCacheOpenAIKey();
                         _keyTextEditingController.text = cacheKey;
@@ -123,39 +123,39 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
                       Icons.link,
                       Colors.deepPurpleAccent,
                       26,
-                      'Customize OpenAI URL',
+                      '定制OpenAI URL',
                       () async {
                         String cacheUrl = ChatGPT.getCacheOpenAIBaseUrl();
                         _urlTextEditingController.text = cacheUrl;
                         _showCustomOpenAIUrlDialog();
                       },
                     ),
-                    renderItemWidget(
-                      Icons.face,
-                      Colors.deepPurple,
-                      26,
-                      'Hey, somrit here!',
-                      () async {
-                        final Uri url = Uri.parse(
-                            'https://www.linkedin.com/in/somritdasgupta');
-                        launchURL(url.toString());
-                      },
-                    ),
-                    renderItemWidget(
-                      Icons.privacy_tip_rounded,
-                      Colors.red,
-                      26,
-                      'Privacy Policy',
-                      () async {
-                        Vibration.vibrate(duration: 50);
-                        Utils.jumpPage(context, const PrivacyPolicyPage());
-                      },
-                    ),
+                    // renderItemWidget(
+                    //   Icons.face,
+                    //   Colors.deepPurple,
+                    //   26,
+                    //   'Hey, somrit here!',
+                    //   () async {
+                    //     final Uri url = Uri.parse(
+                    //         'https://www.linkedin.com/in/somritdasgupta');
+                    //     launchURL(url.toString());
+                    //   },
+                    // ),
+                    // renderItemWidget(
+                    //   Icons.privacy_tip_rounded,
+                    //   Colors.red,
+                    //   26,
+                    //   'Privacy Policy',
+                    //   () async {
+                    //     Vibration.vibrate(duration: 50);
+                    //     Utils.jumpPage(context, const PrivacyPolicyPage());
+                    //   },
+                    // ),
                     renderItemWidget(
                       Icons.delete,
                       Colors.indigo,
                       22,
-                      'Clear Data',
+                      '清理缓存',
                       () {
                         ChatGPT.storage.erase();
                         final store =
@@ -176,7 +176,7 @@ class _SettingPageState extends State<SettingPage> with WidgetsBindingObserver {
           right: 0,
           bottom: 10,
           child: Text(
-            'Made with ❤ by Somrit',
+            'Made with ❤ by Jacobs',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.blueGrey,
