@@ -11,14 +11,20 @@ import 'package:hypebard/stores/AIChatStore.dart';
 import 'package:hypebard/utils/Chatgpt.dart';
 import 'package:provider/provider.dart';
 
+/// 程序的入口点，执行初始化和应用启动
 void main() async {
+  // 设置状态栏样式为透明
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
   ));
+  // 加载环境变量
   await dotenv.load(fileName: ".env");
 
+  // 初始化存储和ChatGPT服务
   await GetStorage.init();
   await ChatGPT.initChatGPT();
+
+  // 启动应用并配置加载状态
   runApp(
     ChangeNotifierProvider(
       create: (context) => AIChatStore(),
@@ -28,15 +34,19 @@ void main() async {
   configLoading();
 }
 
+/// 设置全屏模式，保留底部Overlay
 void enterFullScreenButKeepBottomOverlay() {
+  // 设置系统UI模式为全屏边缘模式
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 }
 
+/// MyApp Widget，应用的根组件
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // 构建应用基础结构，隐藏键盘，设置主题和首页
     return HideKeyboard(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -59,7 +69,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// 配置EasyLoading加载指示器的显示样式和行为
 Future<void> configLoading() async {
+  // 配置EasyLoading实例，设置其外观和行为
   EasyLoading.instance
     ..maskType = EasyLoadingMaskType.none
     ..loadingStyle = EasyLoadingStyle.dark

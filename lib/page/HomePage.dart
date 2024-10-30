@@ -85,6 +85,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
+      // 设置AppBar的属性，包括标题、背景颜色和操作按钮
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         forceMaterialTransparency: true,
