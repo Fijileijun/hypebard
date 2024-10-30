@@ -331,7 +331,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget _renderMessageItem(Map message, int index) {
     String role = message['role'];
     String defaultAvatar = 'images/bard.png';
-    String defaultRoleName = 'Bard';
+    String defaultRoleName = '喵助手';
     Color defaultColor = const Color(0x8B46144B);
     Color defaultTextColor = Colors.black;
     String defaultTextPrefix = '';
@@ -346,7 +346,7 @@ class _ChatPageState extends State<ChatPage> {
 
     if (role == 'user') {
       defaultAvatar = 'images/you.png';
-      defaultRoleName = 'You';
+      defaultRoleName = '你';
       defaultColor = const Color(0x848A9169);
       defaultIcons = [];
     } else if (role == 'error') {
