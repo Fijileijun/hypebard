@@ -31,14 +31,16 @@ class ChatGPT {
     {
       "type": "chat",
       "name": "餐厅培训助手",
-      "desc": "有什么问题关于餐厅培训问题可以直接问我",
+      "desc": "有什么不懂的，可以直接问我哟，让我们边学边做",
       "isContinuous": true,
       "content": "\nInstructions:"
           "\nYou are ChatGPT. The answer to each question should be as concise as possible. If you're making a list, don't have too many entries."
           " If possible, please format it in a friendly markdown format."
           '\n',
       "tips": [
-        "如何做披萨！"
+        "餐厅运营知识学习",
+        "菜品制作知识学习",
+        "餐厅设备知识学习",
       ],
     },
     // {

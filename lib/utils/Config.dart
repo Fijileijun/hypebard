@@ -1,18 +1,15 @@
 import 'package:hypebard/utils/Chatgpt.dart';
 
 class Config {
-  static late Config _instance = Config._();
+  static final Config _instance = Config._();
 
   factory Config() => _getInstance();
 
   static Config get instance => _getInstance();
 
-  Config._() {}
+  Config._();
 
   static Config _getInstance() {
-    if (_instance == null) {
-      _instance = Config._();
-    }
     return _instance;
   }
 
@@ -34,7 +31,7 @@ class Config {
 
   static bool isInfiniteNumberVersion =
       true; // Unlimited frequency. Development and use
-  static String appName = 'hypeBard';
+  static String appName = '喵助手';
   static String contactEmail = 'jacobs_lei@163.com';
   static int watchAdApiCount = 3;
   static int appUserAdCount = 20; // Do not actively display advertisements if the number of times exceeds (redemption page)

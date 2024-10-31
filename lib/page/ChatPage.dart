@@ -11,6 +11,10 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:vibration/vibration.dart';
+import 'package:speech_xf/speech_xf.dart';
+import 'package:hypebard/utils/platform.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 
 class ChatPage extends StatefulWidget {
   final String chatId;
@@ -28,7 +32,9 @@ class ChatPage extends StatefulWidget {
   _ChatPageState createState() => _ChatPageState();
 }
 
+// 定义一个枚举类型TtsState，用于表示文本转语音的播放状态
 enum TtsState { playing, stopped, paused, continued }
+
 
 class _ChatPageState extends State<ChatPage> {
   static final LottieBuilder _generatingLottie =
@@ -37,19 +43,24 @@ class _ChatPageState extends State<ChatPage> {
   final ScrollController _listController = ScrollController();
 
   late FlutterTts _flutterTts;
+
+  // 定义一个变量来存储当前语音合成的状态
   TtsState _ttsState = TtsState.stopped;
+
+  // 定义一个变量来存储需要朗读的文本
   String _speakText = '';
 
+  // 标记是否正在执行复制操作的布尔变量
   bool _isCopying = false;
+
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
 
-  Future<void> initTts() async {
+  void _initializeFlutterTts() {
     _flutterTts = FlutterTts();
-
     _setAwaitOptions();
 
     _flutterTts.setStartHandler(() {
@@ -107,33 +118,172 @@ class _ChatPageState extends State<ChatPage> {
     });
   }
 
+  void _initializeXfTts() {
+
+    /// 讯飞语音识别初始化
+    _initXfSpeechSDK();
+
+    /// 语音播放结束回调
+    SpeechXf.onLoopSpeakingListener(
+      onCompeleted: (onCompeleted) async {
+        setState(() {
+          if (kDebugMode) {
+            print("Complete");
+          }
+          _ttsState = TtsState.stopped;
+        });
+      },
+    );
+  }
+
   Future _setAwaitOptions() async {
     await _flutterTts.awaitSpeakCompletion(true);
   }
 
   Future<void> _speak(String text) async {
-    if (_ttsState == TtsState.playing) {
-      await _flutterTts.stop();
+    if (PlatformTool.isAndroid()) {
+      if (_ttsState == TtsState.playing) {
+        setState(() {
+          if (kDebugMode) {
+            print("stopped");
+          }
+          _ttsState = TtsState.stopped;
+        });
+        await SpeechXf.stopSpeaking();
+      }
+      if (_speakText == text) {
+        _speakText = '';
+        return;
+      }
+      _speakText = text;
+      if (_ttsState == TtsState.stopped) {
+        setState(() {
+          if (kDebugMode) {
+            print("Playing");
+          }
+          _ttsState = TtsState.playing;
+        });
+        /// 开始语音合成
+        /// [volume] :音量,范围(0~100),默认50;
+        /// [speed] :语速,范围(0~100),默认50;
+        /// [pitch] :语调,范围(0~100),默认50;
+        /// [streamType] :音频流类型，默认为音乐;
+        /// [content] :播放内容;
+        /// [voiceName] :发音人,默认"小燕".每个发音人有对应的性别，语种和方言。具体可参照demo中
+        /// 的发音人列表。
+        /*
+       *  云端支持如下发音人：
+       *  对于网络TTS的发音人角色，不同引擎类型支持的发音人不同，使用中请注意选择。
+       *
+       *  |--------|----------------|
+       *  |  发音人 |  参数          |
+       *  |--------|----------------|
+       *  |  小燕   |   xiaoyan     |
+       *  |--------|----------------|
+       *  |  小宇   |   xiaoyu      |
+       *  |--------|----------------|
+       *  |  凯瑟琳 |   catherine   |
+       *  |--------|----------------|
+       *  |  亨利   |   henry       |
+       *  |--------|----------------|
+       *  |  玛丽   |   vimary      |
+       *  |--------|----------------|
+       *  |  小研   |   vixy        |
+       *  |--------|----------------|
+       *  |  小琪   |   vixq        |
+       *  |--------|----------------|
+       *  |  小峰   |   vixf        |
+       *  |--------|----------------|
+       *  |  小梅   |   vixl        |
+       *  |--------|----------------|
+       *  |  小莉   |   vixq        |
+       *  |--------|----------------|
+       *  |  小蓉   |   vixr        |
+       *  |--------|----------------|
+       *  |  小芸   |   vixyun      |
+       *  |--------|----------------|
+       *  |  小坤   |   vixk        |
+       *  |--------|----------------|
+       *  |  小强   |   vixqa       |
+       *  |--------|----------------|
+       *  |  小莹   |   vixyin      |
+       *  |--------|----------------|
+       *  |  小新   |   vixx        |
+       *  |--------|----------------|
+       *  |  楠楠   |   vinn        |
+       *  |--------|----------------|
+       *  |  老孙   |   vils        |
+       *  |--------|----------------|
+       */
+        // 初始化音量，速度，音高，流类型和发音人
+        // 这些变量用于控制语音的相关属性
+        String volume = "50";    // 音量，这里设置为默认值50
+        String speed = "50";     // 速度，这里设置为默认值50
+        String pitch = "50";     // 音高，这里设置为默认值50
+        String streamType = '3'; // 流类型，这里选择默认值3，具体含义依赖于上下文
+        await SpeechXf.startSpeaking(
+          content: text,
+          speed: speed,
+          volume: volume,
+          pitch: pitch,
+          voiceName: 'xiaoyu',
+          streamType: streamType,
+        );
+      }
+    } else {
+      if (_ttsState == TtsState.playing) {
+        await _flutterTts.stop();
+      }
+      if (_speakText == text) {
+        _speakText = '';
+        return;
+      }
+      _speakText = text;
+      await _flutterTts.speak(text);
     }
-    if (_speakText == text) {
-      _speakText = '';
-      return;
-    }
-    _speakText = text;
-    await _flutterTts.speak(text);
+  }
+
+  /// 讯飞语音识别初始化
+  void _initXfSpeechSDK() async {
+    await SpeechXf.init(dotenv.env['XUNFEI_APP_ID'] ?? '');
   }
 
   @override
   void initState() {
     super.initState();
-
     initTts();
   }
 
   @override
   void dispose() {
-    _flutterTts.stop();
+    disposeTts();
     super.dispose();
+  }
+
+  /// 初始化文本转语音功能
+  ///
+  /// 根据当前平台（Android或其他）来决定初始化哪种文本转语音引擎
+  Future<void> initTts() async {
+    // 如果是Android平台，初始化特定于Android的文本转语音引擎
+    if (PlatformTool.isAndroid()) {
+      _initializeXfTts();
+    } else {
+      // 否则，初始化通用的Flutter文本转语音引擎
+      _initializeFlutterTts();
+    }
+  }
+
+  /// 释放文本转语音资源
+  ///
+  /// 根据当前平台（Android或其他）来执行相应的停止和销毁操作
+  /// 在Android平台上，调用SpeechXf.ttsDestroy()来释放资源
+  /// 在其他平台上，调用_flutterTts.stop()来停止当前的语音合成
+  void disposeTts() {
+    if (PlatformTool.isAndroid()) {
+      SpeechXf.ttsDestroy();
+    } else {
+      _flutterTts.stop();
+    }
   }
 
   void scrollToBottom() {

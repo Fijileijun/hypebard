@@ -30,6 +30,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _renderBottomInputWidget() {
+    // 创建一个GestureDetector widget，用于响应用户的点击操作
+    // 通过设置HitTestBehavior为translucent，允许点击事件透过此widget传递到其下方的widget
+    // 当用户点击此widget时，调用handleClickInput函数以处理点击事件
+    // 子widget是一个常量构造的QuestionInput，用于展示一个特定的输入框
+    // 此处的输入框被禁用且不会自动获得焦点
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
@@ -159,7 +164,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     if (store.homeHistoryList.length > 0)
                       _renderTitle(
-                        '会话历史',
+                        '对话历史',
                         animateText: false,
                         rightContent: Flexible(
                           child: SizedBox(
@@ -199,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '更多',
+                                      '查看更多',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontSize: 18,
@@ -278,9 +283,9 @@ class _HomePageState extends State<HomePage> {
                           child: AnimatedTextKit(
                             repeatForever: true,
                             animatedTexts: [
-                              RotateAnimatedText('Awesome.'),
-                              RotateAnimatedText('Incredible.'),
-                              RotateAnimatedText('hypeBard.'),
+                              RotateAnimatedText('伟大的.'),
+                              RotateAnimatedText('不可思议的.'),
+                              RotateAnimatedText('喵助手.'),
                             ],
                           ),
                         ),
